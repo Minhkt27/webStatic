@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRT Solution - Chuyên Gia Giải Pháp Biển Bảng Y Tế & Điện Nhẹ</title>
+
+    <!-- Tích hợp Tailwind CSS qua CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb', /* Xanh dương chủ đạo */
+                            700: '#1d4ed8',
+                            900: '#1e3a8a', /* Xanh dương đậm cho text/footer */
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Tải Font Inter và FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Hiệu ứng mờ dần khi cuộn trang */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+
+        .fade-in.appear {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Chỉnh thanh cuộn (Scrollbar) */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2563eb;
+        }
+
+        /* Carousel fade effect */
+        .carousel-item {
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .carousel-item.active {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 antialiased selection:bg-brand-500 selection:text-white">
+
+    <nav class="bg-white shadow-sm sticky top-0 z-50 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <!-- Logo SRT Solution -->
+                <a href="#" class="flex-shrink-0 flex items-center gap-3 group">
+                    <div
+                        class="w-12 h-12 bg-brand-600 text-white rounded-lg font-bold text-2xl flex items-center justify-center shadow-md group-hover:bg-brand-700 transition-colors">
+                        S
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-bold text-2xl text-brand-900 tracking-tight leading-none">SRT <span
+                                class="text-brand-600">Solution</span></span>
+                        <span class="text-[10px] text-gray-500 uppercase tracking-widest mt-1 font-medium">Giải pháp y
+                            tế & điện nhẹ</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#about" class="text-gray-600 hover:text-brand-600 font-medium transition-colors">Về Chúng
+                        Tôi</a>
+                    <a href="#services" class="text-gray-600 hover:text-brand-600 font-medium transition-colors">Dịch
+                        Vụ</a>
+                    <a href="#gallery" class="text-gray-600 hover:text-brand-600 font-medium transition-colors">Dự
+                        Án</a>
+                    <a href="#partners" class="text-gray-600 hover:text-brand-600 font-medium transition-colors">Đối
+                        Tác</a>
+                    <a href="#contact"
+                        class="bg-brand-600 hover:bg-brand-700 text-white px-6 py-2.5 rounded-md font-medium transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                        Liên Hệ Ngay
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="flex items-center md:hidden">
+                    <button id="mobile-menu-btn"
+                        class="text-gray-500 hover:text-brand-600 focus:outline-none p-2 bg-gray-50 rounded-md">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full shadow-xl">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="#about"
+                    class="block px-4 py-3 text-base font-medium text-gray-700 hover:text-brand-600 hover:bg-brand-50 rounded-md transition-colors">Về
+                    Chúng Tôi</a>
+                <a href="#services"
+                    class="block px-4 py-3 text-base font-medium text-gray-700 hover:text-brand-600 hover:bg-brand-50 rounded-md transition-colors">Dịch
+                    Vụ</a>
+                <a href="#gallery"
+                    class="block px-4 py-3 text-base font-medium text-gray-700 hover:text-brand-600 hover:bg-brand-50 rounded-md transition-colors">Dự
+                    Án</a>
+                <a href="#partners"
+                    class="block px-4 py-3 text-base font-medium text-gray-700 hover:text-brand-600 hover:bg-brand-50 rounded-md transition-colors">Đối
+                    Tác</a>
+                <a href="#contact"
+                    class="block px-4 py-3 mt-4 text-center text-base font-medium text-white bg-brand-600 rounded-md hover:bg-brand-700 shadow-sm">Nhận
+                    Tư Vấn</a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="about" class="relative bg-white overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div
+                class="relative z-10 pb-12 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32 pt-16 sm:pt-24 lg:pt-32">
+
+                <!-- SVG Mảng cắt chéo -->
+                <svg class="hidden lg:block absolute right-0 inset-y-0 h-full w-48 text-white transform translate-x-1/2 z-20"
+                    fill="currentColor" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                    <polygon points="50,0 100,0 50,100 0,100" />
+                </svg>
+
+                <main
+                    class="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28 relative z-30">
+                    <div class="sm:text-center lg:text-left fade-in">
+                        <div
+                            class="inline-flex items-center px-3 py-1 rounded-full bg-brand-50 text-brand-600 text-sm font-semibold mb-6 border border-brand-100 shadow-sm">
+                            <span class="flex w-2.5 h-2.5 rounded-full bg-brand-600 mr-2 animate-pulse"></span>
+                            Tư vấn - Thiết kế - Thi công
+                        </div>
+                        <h1
+                            class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl leading-[1.1]">
+                            <span class="block xl:inline">Giải pháp toàn diện về</span>
+                            <span class="block text-brand-600 mt-1">Biển bảng Y tế & Điện nhẹ</span>
+                        </h1>
+                        <p
+                            class="mt-4 text-base text-gray-600 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0 leading-relaxed">
+                            SRT Solution tự hào là đối tác tin cậy chuyên tư vấn thiết kế, thi công biển bảng chỉ dẫn
+                            chuyên nghiệp và hệ thống điện nhẹ đạt chuẩn cho các bệnh viện tuyến đầu tại Việt Nam.
+                        </p>
+                        <div
+                            class="mt-8 sm:mt-10 sm:flex sm:justify-center lg:justify-start gap-4 flex-col sm:flex-row">
+                            <a href="#services"
+                                class="w-full sm:w-auto flex items-center justify-center px-8 py-3.5 border border-transparent text-base font-medium rounded-md text-white bg-brand-600 hover:bg-brand-700 md:text-lg transition duration-300 shadow-lg shadow-brand-500/30">
+                                Khám Phá Dịch Vụ
+                            </a>
+                            <a href="#gallery"
+                                class="w-full sm:w-auto flex items-center justify-center px-8 py-3.5 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 hover:text-brand-600 md:text-lg transition duration-300 shadow-sm mt-3 sm:mt-0">
+                                Xem Dự Án Thực Tế
+                            </a>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <!-- Hình ảnh Hero Carousel (Tự động chuyển ảnh) -->
+        <div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 bg-gray-900 relative h-64 sm:h-80 md:h-96 lg:h-full">
+            <!-- Ảnh 1: Không gian bệnh viện -->
+            <img class="carousel-item active absolute inset-0 w-full h-full object-cover"
+                src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=1453&auto=format&fit=crop"
+                alt="Không gian bệnh viện hiện đại">
+            <!-- Ảnh 2: Hệ thống máy chủ/Điện nhẹ -->
+            <img class="carousel-item absolute inset-0 w-full h-full object-cover"
+                src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=1600&auto=format&fit=crop"
+                alt="Hệ thống điện nhẹ và máy chủ">
+            <!-- Ảnh 3: Màn hình điện tử/Biển LED -->
+            <img class="carousel-item absolute inset-0 w-full h-full object-cover"
+                src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=1600&auto=format&fit=crop"
+                alt="Màn hình hiển thị điện tử">
+
+            <!-- Lớp phủ màu mờ cho tất cả ảnh để làm nổi khối -->
+            <div class="absolute inset-0 bg-brand-900 mix-blend-multiply opacity-20 z-10"></div>
+        </div>
+    </section>
+
+    <section id="services" class="py-24 bg-gray-50 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto fade-in mb-16">
+                <h2 class="text-base text-brand-600 font-bold tracking-wider uppercase">Năng Lực Cốt Lõi</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                    Dịch Vụ Chúng Tôi Cung Cấp
+                </p>
+                <div class="w-24 h-1 bg-brand-600 mx-auto mt-6 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+                <!-- Service 1: Biển bảng y tế -->
+                <div
+                    class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 fade-in group transform hover:-translate-y-1">
+                    <div class="h-56 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?q=80&w=800&auto=format&fit=crop"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            alt="Hệ thống biển bảng y tế">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <i class="fas fa-map-signs text-3xl text-white absolute bottom-4 left-6"></i>
+                    </div>
+                    <div class="p-8">
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">Hệ Thống Biển Bảng Y Tế</h3>
+                        <p class="text-gray-600 leading-relaxed mb-4 text-sm">
+                            Thiết kế và thi công đồng bộ hệ thống biển báo, sơ đồ chỉ dẫn nội/ngoại khu chuyên biệt cho
+                            bệnh viện, tối ưu luồng di chuyển của bệnh nhân.
+                        </p>
+                        <ul class="text-sm text-gray-500 space-y-2">
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-brand-500"></i> Biển chỉ dẫn
+                                các khoa phòng</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-brand-500"></i> Sơ đồ thoát
+                                hiểm, sơ đồ tầng</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-brand-500"></i> Biển chức
+                                danh, hộp đèn mica</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Service 2: Biển LED & Thiết kế -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 fade-in group transform hover:-translate-y-1"
+                    style="transition-delay: 100ms;">
+                    <div class="h-56 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1517502474497-78aa0a4f5f84?q=80&w=800&auto=format&fit=crop"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            alt="Biển LED và nhận diện">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <i class="fas fa-tv text-3xl text-white absolute bottom-4 left-6"></i>
+                    </div>
+                    <div class="p-8">
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">Biển LED & Nhận Diện</h3>
+                        <p class="text-gray-600 leading-relaxed mb-4 text-sm">
+                            Sản xuất, lắp đặt màn hình LED, biển vẫy, chữ nổi phát sáng chất lượng cao. Tư vấn thiết kế
+                            nhận diện thương hiệu chuyên nghiệp cho tổ chức y tế.
+                        </p>
+                        <ul class="text-sm text-gray-500 space-y-2">
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-brand-500"></i> Màn hình LED
+                                ma trận, LED full</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-brand-500"></i> Bộ chữ nổi
+                                Mica, Inox gắn LED</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-brand-500"></i> Thiết kế
+                                Logo, Bộ nhận diện</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Service 3: Điện nhẹ -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 fade-in group transform hover:-translate-y-1"
+                    style="transition-delay: 200ms;">
+                    <div class="h-56 relative overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80&w=800&auto=format&fit=crop"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            alt="Lắp đặt điện nhẹ">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                        <i class="fas fa-bolt text-3xl text-white absolute bottom-4 left-6"></i>
+                    </div>
+                    <div class="p-8">
+                        <h3 class="text-xl font-bold text-gray-900 mb-3">Lắp Đặt Điện Nhẹ (ELV)</h3>
+                        <p class="text-gray-600 leading-relaxed mb-4 text-sm">
+                            Cung cấp giải pháp tổng thể về hệ thống điện nhẹ đảm bảo hạ tầng vận hành ổn định, an toàn
+                            và bảo mật cho quy mô bệnh viện, phòng khám.
+                        </p>
+                        <ul class="text-sm text-gray-500 space-y-2">
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-brand-500"></i> Hệ thống
+                                Camera giám sát CCTV</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-brand-500"></i> Hệ thống
+                                chuông gọi y tá</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-brand-500"></i> Mạng nội bộ
+                                LAN/WAN, Server</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 fade-in">
+                <div class="max-w-2xl">
+                    <h2 class="text-base text-brand-600 font-bold tracking-wider uppercase">Thư Viện Hình Ảnh</h2>
+                    <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                        Dự Án Tiêu Biểu
+                    </p>
+                    <p class="mt-4 text-lg text-gray-600">
+                        Một số hình ảnh thi công thực tế các hạng mục biển bảng, điện nhẹ tại các đối tác của chúng tôi.
+                    </p>
+                </div>
+                <a href="#contact"
+                    class="hidden md:inline-flex items-center text-brand-600 font-semibold hover:text-brand-800 transition-colors">
+                    Hợp tác với chúng tôi <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+
+            <!-- Grid 6 ảnh minh họa dự án -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 fade-in">
+
+                <!-- Gallery Item 1 -->
+                <div
+                    class="relative overflow-hidden rounded-xl group aspect-w-4 aspect-h-3 shadow-sm hover:shadow-lg transition-all cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1538108149393-fbbd81895907?q=80&w=800&auto=format&fit=crop"
+                        class="object-cover w-full h-64 transform group-hover:scale-110 transition duration-700"
+                        alt="Dự án 1">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-brand-900/90 via-brand-900/40 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 flex flex-col justify-end p-6">
+                        <span class="text-brand-300 text-sm font-semibold mb-1">Biển bảng Y tế</span>
+                        <h4 class="text-white text-lg font-bold">Hành lang Bệnh Viện K</h4>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 2 -->
+                <div
+                    class="relative overflow-hidden rounded-xl group aspect-w-4 aspect-h-3 shadow-sm hover:shadow-lg transition-all cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1542744095-291d1f67b221?q=80&w=800&auto=format&fit=crop"
+                        class="object-cover w-full h-64 transform group-hover:scale-110 transition duration-700"
+                        alt="Dự án 2">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-brand-900/90 via-brand-900/40 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 flex flex-col justify-end p-6">
+                        <span class="text-brand-300 text-sm font-semibold mb-1">Thi công Biển LED</span>
+                        <h4 class="text-white text-lg font-bold">Màn hình sảnh Đại học Y</h4>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 3 -->
+                <div
+                    class="relative overflow-hidden rounded-xl group aspect-w-4 aspect-h-3 shadow-sm hover:shadow-lg transition-all cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=800&auto=format&fit=crop"
+                        class="object-cover w-full h-64 transform group-hover:scale-110 transition duration-700"
+                        alt="Dự án 3">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-brand-900/90 via-brand-900/40 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 flex flex-col justify-end p-6">
+                        <span class="text-brand-300 text-sm font-semibold mb-1">Hệ thống Điện nhẹ</span>
+                        <h4 class="text-white text-lg font-bold">Lắp đặt mạng nội bộ tủ Server</h4>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 4 -->
+                <div
+                    class="relative overflow-hidden rounded-xl group aspect-w-4 aspect-h-3 shadow-sm hover:shadow-lg transition-all cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1585435557343-3b092031a831?q=80&w=800&auto=format&fit=crop"
+                        class="object-cover w-full h-64 transform group-hover:scale-110 transition duration-700"
+                        alt="Dự án 4">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-brand-900/90 via-brand-900/40 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 flex flex-col justify-end p-6">
+                        <span class="text-brand-300 text-sm font-semibold mb-1">Chỉ dẫn nội khu</span>
+                        <h4 class="text-white text-lg font-bold">Sơ đồ thoát hiểm BVĐK Bát Xát</h4>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 5 -->
+                <div
+                    class="relative overflow-hidden rounded-xl group aspect-w-4 aspect-h-3 shadow-sm hover:shadow-lg transition-all cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1551281622-d558a36236b8?q=80&w=800&auto=format&fit=crop"
+                        class="object-cover w-full h-64 transform group-hover:scale-110 transition duration-700"
+                        alt="Dự án 5">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-brand-900/90 via-brand-900/40 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 flex flex-col justify-end p-6">
+                        <span class="text-brand-300 text-sm font-semibold mb-1">Thiết bị ELV</span>
+                        <h4 class="text-white text-lg font-bold">Hệ thống Camera an ninh CCTV</h4>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 6 -->
+                <div
+                    class="relative overflow-hidden rounded-xl group aspect-w-4 aspect-h-3 shadow-sm hover:shadow-lg transition-all cursor-pointer">
+                    <img src="https://images.unsplash.com/photo-1513628253939-010e64ac66cd?q=80&w=800&auto=format&fit=crop"
+                        class="object-cover w-full h-64 transform group-hover:scale-110 transition duration-700"
+                        alt="Dự án 6">
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-brand-900/90 via-brand-900/40 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 flex flex-col justify-end p-6">
+                        <span class="text-brand-300 text-sm font-semibold mb-1">Nhận diện thương hiệu</span>
+                        <h4 class="text-white text-lg font-bold">Bộ chữ nổi Logo phát sáng</h4>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mt-8 text-center md:hidden">
+                <a href="#contact"
+                    class="inline-flex items-center text-brand-600 font-semibold hover:text-brand-800 transition-colors">
+                    Hợp tác với chúng tôi <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="partners" class="py-20 bg-gray-50 border-y border-gray-100 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-3xl font-extrabold text-brand-900 sm:text-4xl">
+                    Đồng Hành Cùng Các Đối Tác Lớn
+                </h2>
+                <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+                    Sự tín nhiệm từ các bệnh viện tuyến đầu chính là minh chứng rõ ràng nhất cho chất lượng thi công và
+                    uy tín của SRT Solution.
+                </p>
+            </div>
+
+            <!-- Giao diện lưới hiển thị Logo các bệnh viện đối tác -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12 items-center fade-in">
+
+                <div
+                    class="col-span-1 flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 group">
+                    <img class="max-h-24 w-auto object-contain grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+                        src="https://placehold.co/300x150/ffffff/1e3a8a?text=Bệnh+Viện+K" alt="Bệnh viện K">
+                    <p class="mt-4 text-sm font-semibold text-gray-700 text-center">Bệnh Viện K</p>
+                </div>
+
+                <div class="col-span-1 flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 group"
+                    style="transition-delay: 100ms;">
+                    <img class="max-h-24 w-auto object-contain grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+                        src="https://placehold.co/300x150/ffffff/1e3a8a?text=ĐH+Y+Hà+Nội"
+                        alt="Bệnh viện Đại học Y Hà Nội">
+                    <p class="mt-4 text-sm font-semibold text-gray-700 text-center">BV Đại Học Y Hà Nội</p>
+                </div>
+
+                <div class="col-span-1 flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 group"
+                    style="transition-delay: 200ms;">
+                    <img class="max-h-24 w-auto object-contain grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+                        src="https://placehold.co/300x150/ffffff/1e3a8a?text=BVĐK+Bát+Xát" alt="Bệnh viện Bát Xát">
+                    <p class="mt-4 text-sm font-semibold text-gray-700 text-center">BVĐK Bát Xát</p>
+                </div>
+
+                <div class="col-span-1 flex flex-col items-center justify-center p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 group"
+                    style="transition-delay: 300ms;">
+                    <img class="max-h-24 w-auto object-contain grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+                        src="https://placehold.co/300x150/ffffff/1e3a8a?text=BV+Hà+Trung" alt="Bệnh viện Hà Trung">
+                    <p class="mt-4 text-sm font-semibold text-gray-700 text-center">BV Hà Trung</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="bg-brand-900 text-white relative">
+        <div class="absolute inset-0 overflow-hidden pointer-events-none opacity-10">
+            <svg class="absolute -top-24 -right-24 w-96 h-96 text-white" fill="currentColor" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="50" />
+            </svg>
+        </div>
+
+        <div class="max-w-7xl mx-auto pt-20 pb-12 px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-8">
+                <!-- Cột 1: Giới thiệu -->
+                <div class="md:col-span-5">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div
+                            class="w-12 h-12 bg-white text-brand-900 rounded-lg font-bold text-2xl flex items-center justify-center shadow-lg">
+                            S
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="font-bold text-2xl text-white tracking-tight leading-none">SRT Solution</span>
+                            <span class="text-xs text-brand-300 uppercase tracking-widest mt-1">Giải pháp uy tín</span>
+                        </div>
+                    </div>
+                    <p class="text-brand-100 text-base leading-relaxed mb-8 max-w-md">
+                        Chúng tôi chuyên kiến tạo không gian thông tin trực quan và cung cấp hạ tầng điện nhẹ an toàn,
+                        góp phần nâng cao chất lượng vận hành và trải nghiệm bệnh nhân tại các cơ sở y tế.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#"
+                            class="w-10 h-10 rounded-full bg-brand-800 flex items-center justify-center text-white hover:bg-brand-500 hover:shadow-lg transition-all duration-300">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#"
+                            class="w-10 h-10 rounded-full bg-brand-800 flex items-center justify-center text-white hover:bg-brand-500 hover:shadow-lg transition-all duration-300">
+                            <i class="fab fa-zalo font-bold">Zalo</i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Cột 2: Dịch vụ -->
+                <div class="md:col-span-3">
+                    <h3 class="text-lg font-bold mb-6 text-white uppercase tracking-wider">Dịch Vụ</h3>
+                    <ul class="space-y-4 text-brand-100">
+                        <li><a href="#services" class="hover:text-white transition-colors flex items-start gap-2"><i
+                                    class="fas fa-chevron-right mt-1 text-[10px] text-brand-400"></i> Biển bảng chỉ dẫn
+                                y tế</a></li>
+                        <li><a href="#services" class="hover:text-white transition-colors flex items-start gap-2"><i
+                                    class="fas fa-chevron-right mt-1 text-[10px] text-brand-400"></i> Biển LED & Nhận
+                                diện</a></li>
+                        <li><a href="#services" class="hover:text-white transition-colors flex items-start gap-2"><i
+                                    class="fas fa-chevron-right mt-1 text-[10px] text-brand-400"></i> Lắp đặt điện nhẹ
+                                (ELV)</a></li>
+                        <li><a href="#services" class="hover:text-white transition-colors flex items-start gap-2"><i
+                                    class="fas fa-chevron-right mt-1 text-[10px] text-brand-400"></i> Tư vấn thiết kế
+                                giải pháp</a></li>
+                    </ul>
+                </div>
+
+                <!-- Cột 3: Liên hệ -->
+                <div class="md:col-span-4">
+                    <h3 class="text-lg font-bold mb-6 text-white uppercase tracking-wider">Thông Tin Liên Hệ</h3>
+                    <ul class="space-y-5 text-brand-100 bg-brand-800/50 p-6 rounded-xl border border-brand-700/50">
+                        <li class="flex items-start gap-4">
+                            <div
+                                class="w-8 h-8 rounded-full bg-brand-700 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i class="fas fa-map-marker-alt text-white text-sm"></i>
+                            </div>
+                            <span class="text-sm leading-relaxed">[Địa chỉ văn phòng công ty SRT Solution]</span>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <div
+                                class="w-8 h-8 rounded-full bg-brand-700 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-phone-alt text-white text-sm"></i>
+                            </div>
+                            <a href="tel:0901234567"
+                                class="text-lg font-semibold hover:text-white transition-colors">090 123 4567</a>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <div
+                                class="w-8 h-8 rounded-full bg-brand-700 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-envelope text-white text-sm"></i>
+                            </div>
+                            <a href="mailto:lienhe@srtsolution.vn"
+                                class="text-sm hover:text-white transition-colors">lienhe@srtsolution.vn</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div
+                class="border-t border-brand-800 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-brand-300">
+                <p>&copy; 2026 CÔNG TY TNHH SRT SOLUTION. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Mobile Menu
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            const icon = btn.querySelector('i');
+
+            function toggleMenu() {
+                menu.classList.toggle('hidden');
+                if (menu.classList.contains('hidden')) {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                } else {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                }
+            }
+            btn.addEventListener('click', toggleMenu);
+            menu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (!menu.classList.contains('hidden')) toggleMenu();
+                });
+            });
+
+            // 2. Navbar Shadow on Scroll
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 10) {
+                    navbar.classList.add('shadow-md');
+                } else {
+                    navbar.classList.remove('shadow-md');
+                }
+            });
+
+            // 3. Hiệu ứng mờ dần (Fade-in)
+            const faders = document.querySelectorAll('.fade-in');
+            const appearOptions = {
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px"
+            };
+            const appearOnScroll = new IntersectionObserver(function (entries, observer) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) return;
+                    entry.target.classList.add('appear');
+                    observer.unobserve(entry.target);
+                });
+            }, appearOptions);
+            faders.forEach(fader => {
+                appearOnScroll.observe(fader);
+            });
+
+            // 4. Trình chiếu ảnh (Hero Carousel)
+            const items = document.querySelectorAll('.carousel-item');
+            if (items.length > 0) {
+                let currentItem = 0;
+                setInterval(() => {
+                    items[currentItem].classList.remove('active');
+                    currentItem = (currentItem + 1) % items.length;
+                    items[currentItem].classList.add('active');
+                }, 4000); // Chuyển ảnh sau mỗi 4 giây
+            }
+        });
+    </script>
+</body>
+
+</html>
